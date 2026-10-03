@@ -1,297 +1,123 @@
-\# OrangeHRM QA Testing
+# OrangeHRM QA Testing
 
+Proyecto de pruebas realizado sobre OrangeHRM Demo, enfocado principalmente en los módulos de Login y PIM.
 
+Trabajé pruebas manuales, revisión de peticiones HTTP, pruebas de API y automatización de los principales flujos de empleados.
 
-Proyecto de pruebas realizado sobre OrangeHRM Demo, trabajando principalmente los módulos de Login y PIM (gestión de empleados).
+## Alcance
 
+En Login probé inicio de sesión correcto e incorrecto, campos obligatorios, credenciales no válidas y algunos escenarios con espacios, mayúsculas y caracteres especiales.
 
+En PIM trabajé los siguientes flujos:
 
-Durante el proyecto realicé pruebas manuales, pruebas de API y automatización de algunos de los principales flujos del sistema.
+- Registro de empleados
+- Búsqueda por nombre e ID
+- Edición de información
+- Validación de cambios guardados
+- Eliminación de empleados
+- Validación de campos obligatorios
 
+Los casos de prueba completos están en la carpeta `test-cases`.
 
+## Pruebas manuales
 
-\## Pruebas realizadas
+Se ejecutaron 19 casos de prueba:
 
+- Login: 10 casos
+- PIM: 9 casos
+- Resultado: 19 PASS / 0 FAIL
 
+No registré bugs confirmados durante esta ejecución. Algunos comportamientos encontrados quedaron documentados como observaciones porque no tenía un requisito que permitiera considerarlos defectos.
 
-\### Login
+## API
 
+Primero utilicé DevTools para revisar las peticiones que realiza OrangeHRM en el módulo PIM.
 
+Después probé algunos de esos endpoints manualmente con Postman.
 
-Se probaron escenarios como:
+Las pruebas realizadas fueron:
 
+- GET de la lista de empleados → 200 OK
+- GET de un empleado existente → 200 OK
+- POST para crear un empleado → 200 OK
+- POST sin campos obligatorios → 422
+- GET con un ID inexistente → 422
 
+También agregué assertions en Postman para comprobar el código de respuesta y algunos datos del JSON.
 
-\- Inicio de sesión correcto e incorrecto.
+Para las peticiones utilicé la sesión de OrangeHRM. No se incluyeron cookies de sesión en el repositorio.
 
-\- Campos obligatorios.
+## Automatización
 
-\- Usuario no registrado.
+La automatización fue realizada con Playwright y TypeScript.
 
-\- Uso de espacios y caracteres especiales.
+Automatizé estos flujos:
 
-\- Comportamiento del username con mayúsculas y minúsculas.
+- Login con credenciales válidas
+- Crear empleado
+- Crear y buscar empleado
+- Editar empleado y comprobar que el cambio se guarde
+- Eliminar empleado y comprobar que ya no aparezca
 
+Resultado de la última ejecución: **5/5 tests PASS**.
 
+Para organizar el proyecto utilicé Page Object Model, separando las acciones de Login y PIM de los archivos de pruebas. Los datos utilizados por los tests también se encuentran en un archivo independiente.
 
-\### PIM
+## Herramientas utilizadas
 
+- Excel
+- Gherkin
+- Chrome DevTools
+- Postman
+- Playwright
+- TypeScript
+- Git
+- GitHub
 
+## Estructura del repositorio
 
-Las pruebas se enfocaron en el flujo de empleados:
+`automation/playwright/` contiene la automatización con Playwright.
 
+`test-cases/` contiene los casos de prueba manuales.
 
+`gherkin/` contiene los escenarios escritos en Gherkin.
 
-\- Crear empleado.
+`evidence/` contiene las capturas de las pruebas manuales, DevTools, Postman y Playwright.
 
-\- Buscar empleado por nombre e ID.
+`docs/` contiene el informe final del proyecto.
 
-\- Editar información.
+## Ejecutar las pruebas
 
-\- Verificar que los cambios se guarden.
-
-\- Eliminar empleado.
-
-\- Validar campos obligatorios.
-
-
-
-Los casos completos se encuentran en `test-cases/`.
-
-
-
-\## API
-
-
-
-Utilicé DevTools para revisar las peticiones que realiza OrangeHRM y Postman para probar algunos endpoints del módulo PIM.
-
-
-
-Se probaron:
-
-
-
-| Método | Prueba | Respuesta |
-
-|---|---|---|
-
-| GET | Lista de empleados | 200 |
-
-| GET | Empleado por ID | 200 |
-
-| POST | Crear empleado | 200 |
-
-| POST | Crear sin campos obligatorios | 422 |
-
-| GET | ID de empleado inexistente | 422 |
-
-
-
-En Postman también se agregaron validaciones para comprobar el status code y algunos datos de las respuestas JSON.
-
-
-
-Las pruebas utilizaron la sesión de OrangeHRM, por lo que no se guardaron cookies en el repositorio.
-
-
-
-\## Automatización
-
-
-
-Para la automatización utilicé Playwright con TypeScript.
-
-
-
-Se automatizaron 5 casos:
-
-
-
-\- Login correcto.
-
-\- Crear empleado.
-
-\- Crear y buscar empleado.
-
-\- Editar empleado y comprobar el cambio.
-
-\- Eliminar empleado y comprobar que ya no aparezca.
-
-
-
-Resultado de la última ejecución:
-
-
-
-\*\*5 tests ejecutados - 5 PASS\*\*
-
-
-
-Para organizar el código utilicé Page Object Model, separando las páginas, los datos de prueba y los tests.
-
-
-
-\## Herramientas
-
-
-
-\- Excel
-
-\- Gherkin
-
-\- Chrome DevTools
-
-\- Postman
-
-\- Playwright
-
-\- TypeScript
-
-\- Git y GitHub
-
-
-
-\## Estructura
-
-
-
-```text
-
-OrangeHRM-QA-Testing/
-
-│
-
-├── automation/
-
-│   └── playwright/
-
-│       ├── pages/
-
-│       ├── test-data/
-
-│       ├── tests/
-
-│       ├── package.json
-
-│       ├── package-lock.json
-
-│       └── playwright.config.ts
-
-│
-
-├── docs/
-
-├── evidence/
-
-│   ├── pim-manual/
-
-│   ├── devtools/
-
-│   ├── postman/
-
-│   └── playwright/
-
-│
-
-├── gherkin/
-
-│   ├── login.feature
-
-│   └── pim.feature
-
-│
-
-├── test-cases/
-
-├── .gitignore
-
-└── README.md
-
-```
-
-
-
-\## Ejecutar la automatización
-
-
-
-Entrar a la carpeta:
-
-
+Entrar a la carpeta de automatización:
 
 ```bash
-
 cd automation/playwright
-
 ```
 
-
-
-Instalar dependencias:
-
-
+Instalar las dependencias:
 
 ```bash
-
 npm install
-
 ```
-
-
 
 Instalar Chromium:
 
-
-
 ```bash
-
 npx playwright install chromium
-
 ```
 
-
-
-Ejecutar:
-
-
+Ejecutar los tests:
 
 ```bash
-
 npx playwright test
-
 ```
 
-
-
-Ver reporte:
-
-
+Ver el reporte:
 
 ```bash
-
 npx playwright show-report
-
 ```
 
+## Nota
 
-
-> OrangeHRM Demo es un entorno público. Los tests están configurados con un solo worker para evitar problemas al realizar varias operaciones al mismo tiempo sobre la demo.
-
-
-
-\## Resultado
-
-
-
-En las pruebas manuales se ejecutaron 19 casos de Login y PIM, todos con resultado PASS.
-
-
-
-En la automatización se ejecutaron 5 casos E2E, también con resultado PASS.
-
-
-
-No se registraron bugs confirmados durante esta ejecución. Las evidencias de las pruebas están disponibles en la carpeta `evidence/`.
-Autor:Edwar Mia Aguirre
-
+OrangeHRM Demo es un entorno público compartido. Por este motivo configuré Playwright para ejecutar las pruebas con un solo worker y reducir problemas al realizar varias operaciones al mismo tiempo.
