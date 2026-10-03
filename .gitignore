@@ -1,0 +1,22 @@
+# Dependencias de Node.js
+**/node_modules/
+
+# Resultados generados por Playwright
+**/test-results/
+**/playwright-report/
+**/blob-report/
+
+# Archivos temporales y logs
+*.log
+
+# Variables de entorno y credenciales
+.env
+.env.*
+!.env.example
+
+# Visual Studio Code
+.vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
